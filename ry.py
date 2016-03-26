@@ -560,13 +560,9 @@ class Employer(object):
                     if i.race == 'URM' and i.decision == 0: #under-represented who were not hired
                         if i.interviewScore > e.interviewScore:
                             if i in bias:
-                                bias[i] += 1 #list of over-represented indivduals with lower scores
+                                bias[i] += 1 #list of over-represented individuals with lower scores
                             else:
                                 bias[i] = 1
-                            #print bias
-       # print (bias)
-        print len(bias)
-        print len(self.interviewees)
 
         self.fairScore_race = float(len(bias)) / float(len(self.interviewees))
         self.rating['race'] = self.fairScore_race * 100
@@ -578,27 +574,20 @@ class Employer(object):
         for e in self.employees:
             if e.gender == 'male' or e.gender == 'trans': #loop through all hires who are male or trans
                 for i in self.interviewees:
-                    if i.gender == 'female' and i.decision == 0: # loop through unhired females
-                        if i.interviewScore > e.interviewScore: #limit to unhired females with higher scores than hires
+                    if i.gender == 'female' and i.decision == 0: # loop through un-hired females
+                        if i.interviewScore > e.interviewScore: #limit to un-hired females with higher scores than hires
                             if i in bias1:
-                                bias1[i] += 1 #list of over-represented indivduals with lower scores
+                                bias1[i] += 1 #list of over-represented individuals with lower scores
                             else:
                                 bias1[i] = 1
-                            # print bias
-        #print (bias1)
-        print len(bias1)
-        print len(self.interviewees)
 
         self.fairScore_female = float(len(bias1)) / float(len(self.interviewees))
         self.rating['female'] = self.fairScore_female * 100
         print 'female: ' + str(self.rating['female']) + '%'
 
-
-
 ################# Check bias against trans candidates #################
         bias2 = {}
         for e in self.employees:
-
             if e.gender == 'female' or e.gender == 'male':
                 for i in self.interviewees:
                     if i.gender == 'trans' and i.decision == 0: #check if trans person was not hired
@@ -607,10 +596,6 @@ class Employer(object):
                                 bias2[i] += 1 #list of over-represented indivduals with lower scores
                             else:
                                 bias2[i] = 1
-                            # print bias
-        #print bias2
-        print len(bias2)
-        print len(self.interviewees)
 
         self.fairScore_trans = float(len(bias2)) / float(len(self.interviewees))
         self.rating['trans'] = self.fairScore_trans * 100
