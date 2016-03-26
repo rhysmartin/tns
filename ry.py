@@ -1,43 +1,18 @@
-import uuid
-import random
-
-def rollDice(sides):
-    result = random.randint(1,sides)
-    return result
-
 class  Employee(object):
-    def __init__(self, name):
+    def __init__(self, name, gender, race, interviewScore = None):
         self.name = name
-        self.interviewScore = None
-        self.payRate = None
-        self.performanceScore = None
-        genderRoll = rollDice(2)
-        if genderRoll == 1:
-            self.gender = 'male'
-        elif genderRoll == 2:
-            self.gender = 'female'
-        else:
-            self.gender = 'trans'
-
-        raceRoll = rollDice(3)
-        if raceRoll == 3:
-            #under-represented minority
-            self.race = 'URM'
-        elif raceRoll == 2:
-            #well-represented minority
-            self.race = 'WRM'
-        else:
-            #over-represented majority
-            self.race = 'ORM'
-
+        self.interviewScore = interviewScore
 
 class Employer(object):
     def __init__(self, name):
-        self.fairnessScore = None
         self.name = name
-        self.industry = raw_input("With what industry is your company associated?")
+        self.fairScore_race = None
+        self.fairScore_gender = None
+        #self.industry = raw_input("With what industry is your company associated?")
         self.interviewees = []
         self.employees = []
+
+    #methods to be called on employee(s)
     def interview(self, employee, score, decision=0):
         employee.interviewScore = score
         self.interviewees.append(employee)
@@ -52,18 +27,46 @@ class Employer(object):
     def setPay(self, employee, rate):
         employee.payRate = rate
 
-    def setPerformanceScore(self, employee, score):
+    def setPerformance(self, employee, score):
         employee.payRate = score
 
+    #methods to be called on the Employer
+    def fairCheck(self):
+        unfair = []
+        for e in self.employees:
+            if e.race != 'URM':
+                for i in self.interviewees:
+                    if i.interviewScore > e.interviewScore:
+                        unfair.append(i)
+                        print unfair
+        fairPenalty = len(self.interviewees) - len(unfair)
+        print fairPenalty
+        self.fairScore_race = len(self.interviewees) // fairPenalty * 100
+        self.overallScore['race'] = self.fairScore_race
+        print 'race: ' + self.fairScore_race
 
+        unfair = []
+        for e in self.employees:
+            if e.race != 'trans':
+                for i in self.interviewees:
+                    if i.interviewScore > e.interviewScore:
+                        unfair.append(i)
+                        print unfair
+        fairPenalty = len(self.interviewees) - len(unfair)
+        print fairPenalty
+        self.fairScore_trans = len(self.interviewees) // fairPenalty * 100
+        self.overallScore['trans'] = self.fairScore_trans
+        print 'race: ' + self.fairScore_trans
 
-"""class Account(object):
-    def __init__(self, initial_balance=0):
-        ##self.number = uuid.uuid()
-        self.Employee= input("Name on the account?")
-        self.balance = initial_balance
-    def deposit(self, amount):
-        self.balance += amount
-    def withdraw(self, amount):
-        self.balance -= amount"""
-
+        unfair = []
+        for e in self.employees:
+            if e.race != 'female':
+                for i in self.interviewees:
+                    if i.interviewScore > e.interviewScore:
+                        unfair.append(i)
+                        print unfair
+        fairPenalty = len(self.interviewees) - len(unfair)
+        print fairPenalty
+        self.fairScore_female = len(self.interviewees) // fairPenalty * 100
+        self.overallScore['female'] = self.fairScore_female
+        print 'race: ' + self.fairScore_female
