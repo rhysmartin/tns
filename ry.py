@@ -1,4 +1,8 @@
 import gc
+import matplotlib.pyplot as plt
+import numpy as np
+##import matplotlib.axes as xiz
+
 
 class  Employee(object):
     def __init__(self, name, gender, race, interviewScore = None, decision=0):
@@ -7,7 +11,6 @@ class  Employee(object):
         self.race = race
         self.interviewScore = interviewScore
         self.decision = decision
-
 
 e0 = Employee('Snyder', 'trans', 'URM', 38, 1)
 e1 = Employee('Larson', 'trans', 'URM', 13, 1)
@@ -516,6 +519,7 @@ for obj in gc.get_objects():
     if isinstance(obj,Employee):
         candidates.append(obj)
 
+
 class Employer(object):
     def __init__(self, name):
         self.name = name
@@ -613,3 +617,28 @@ class Employer(object):
         print 'trans: ' + str(self.rating['trans']) + '%'
 
 google = Employer('Google')
+
+google.fairCheck()
+
+u = google.rating['race'],
+v = google.rating['female']
+w = google.rating['trans']
+x = [u,v,w]
+
+N = 3
+ind = np.arange(N)
+width = 0.2
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
+ax.set_title('Discrimination in Minority Recruiting by Company X')
+ax.bar(0.2, u,width=0.2,color='b',align='center')
+ax.bar(1.2, v,width=0.2,color='g',align='center')
+ax.bar(2.2, w,width=0.2,color='r',align='center')
+ax.set_ylabel('Percentage Discriminated Against')
+ax.set_xticks(ind+width)
+ax.set_xticklabels( ('Race', 'Women', 'Transgender') )
+
+
+plt.show()
